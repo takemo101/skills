@@ -32,6 +32,33 @@ Skill authoring in this repo follows documentation TDD:
 
 This applies to new skills and edits to existing skills. Do not batch multiple unverified skills.
 
+## Development Workflow
+
+Develop in one skill-sized slice at a time.
+
+1. Pick exactly one skill or documentation slice.
+2. Confirm the scope and success criteria before editing.
+3. Re-read the relevant existing skill and test notes before changing behavior, triggers, hard gates, commands, or conventions.
+4. Add or update the failing baseline scenario first when the slice changes skill behavior.
+5. Implement only that slice; avoid opportunistic edits to unrelated skills or tests.
+6. Verify with a fresh-context subagent or equivalent pressure scenario.
+7. Record results in `tests/<skill-name>/verification.md` before starting another skill slice.
+8. Address review or verification feedback in the same slice.
+9. Mark the slice complete only after the skill/documentation change, test notes, and review/verification are done.
+
+Keep design details, long rationales, and one-off investigations in the relevant test notes or supporting docs. `AGENTS.md` should stay focused on reusable agent workflow.
+
+## GitButler / but Workflow
+
+Use the `but` GitButler workflow for all version-control work.
+
+- Use `but status -fv` before version-control mutations.
+- Use `but` instead of git write commands.
+- Do not run `git add`, `git commit`, `git push`, `git checkout`, `git merge`, `git rebase`, or `git stash`.
+- Add `--status-after` to `but` mutation commands when available.
+- Use IDs reported by `but status -fv`, `but diff`, or `but show`; do not hardcode IDs.
+- Create branches, commits, pushes, PR finalization, and merge steps through the GitButler flow.
+
 ## Skill Names
 
 - Use lowercase kebab-case.
