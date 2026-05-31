@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/takemo101/sksync/main/schemas/sksync.schema.json",
+  "defaultAgents": [
+    "antigravity",
+    "claude-code",
+    "codex",
+    "gemini-cli",
+    "hermes",
+    "jcode",
+    "opencode",
+    "pi",
+    "universal"
+  ],
+  "dependencies": {},
+  "skillDir": "./.sksync/skills"
+}
