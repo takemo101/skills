@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/takemo101/sksync/main/schemas/sksync.bundle.schema.json",
+  "name": "my-skills",
+  "description": "Exported from sksync config.",
+  "entries": {
+    "herdr": {
+      "source": "https://github.com/ogulcancelik/herdr/tree/HEAD",
+      "include": [
+        "SKILL.md"
+      ]
+    },
+    "herdr-delegation": {
+      "source": "./skills/herdr-delegation"
+    }
+  }
+}

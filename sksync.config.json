@@ -8,9 +8,38 @@
     "hermes",
     "jcode",
     "opencode",
-    "pi",
-    "universal"
+    "pi"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "herdr": {
+      "agents": [
+        "antigravity",
+        "claude-code",
+        "codex",
+        "gemini-cli",
+        "hermes",
+        "jcode",
+        "opencode",
+        "pi"
+      ],
+      "include": [
+        "SKILL.md"
+      ],
+      "source": "https://github.com/ogulcancelik/herdr/tree/HEAD"
+    },
+    "herdr-delegation": {
+      "agents": [
+        "antigravity",
+        "claude-code",
+        "codex",
+        "gemini-cli",
+        "hermes",
+        "jcode",
+        "opencode",
+        "pi"
+      ],
+      "source": "./skills/herdr-delegation"
+    }
+  },
   "skillDir": "./.sksync/skills"
 }
