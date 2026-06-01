@@ -1,7 +1,41 @@
 {
-  "lockfileVersion": 4,
-  "generatedBy": "sksync@0.0.7",
-  "generatedAt": "unix:1780267352",
+  "lockfileVersion": 5,
+  "generatedBy": "sksync@0.0.8",
+  "generatedAt": "unix:1780308591",
   "root": ".",
-  "skills": {}
+  "skills": {
+    "herdr": {
+      "source": ".sksync/skills/ogulcancelik/herdr/herdr",
+      "installSource": {
+        "type": "git",
+        "url": "https://github.com/ogulcancelik/herdr.git",
+        "ref": "043968dd97e8a864f4473f1651e9df9ecd6ed99d",
+        "path": "."
+      },
+      "include": [
+        "SKILL.md"
+      ],
+      "hash": "sha256-f287c6bf607804df8e062965b2f9bcbb9636d97904f527d4a835f2015838be4a",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "hash": "sha256-75826452ca09623a7309c0a0d9bd6b29b24c55cf100632fc83bd69a685241f17"
+        }
+      ]
+    },
+    "herdr-delegation": {
+      "source": ".sksync/skills/herdr-delegation",
+      "installSource": {
+        "type": "local",
+        "path": "skills/herdr-delegation"
+      },
+      "hash": "sha256-608edc39a80e424ecd1d7f4543723245b4350eb720e5d56b46b237a39994232e",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "hash": "sha256-5af7ab291b78e785a5047fa0ce2acb1f69791d8123f6d57d8a34b56645aab24e"
+        }
+      ]
+    }
+  }
 }
