@@ -10,7 +10,7 @@
       ]
     },
     "herdr-delegation": {
-      "source": "./skills/herdr-delegation"
+      "source": "../skills/herdr-delegation"
     }
   }
 }
