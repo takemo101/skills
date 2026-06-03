@@ -38,6 +38,22 @@ Observed baseline behavior:
 - Still suggested commands not verified in the local herdr version (`session list --json`, some env vars, direct `pane split` flow).
 - Over-focused on shell quoting; simpler convention is to embed a literal report command in the child prompt using known parent pane ID and child label.
 
+## Scenario D — dependent issue wave with review block
+
+Date: 2026-06-03
+
+Prompt: parent is inside herdr coordinating a dependent issue chain `MIK-102 -> MIK-103 -> MIK-104` with implementer/reviewer children in a child workspace. One child pane ID compacts/changes, the first reviewer returns `BLOCK`, and PRs must not be created or merged by children or before reviewer approval.
+
+Observed behavior with the existing skill before issue-4 edits:
+
+- Correctly covered herdr mechanics: `HERDR_ENV` gate, focused parent discovery, separate workspace, child labels, explicit report command, and re-listing before rereport/steering.
+- Treated pane ID compaction as a steering/cleanup concern, but did not explicitly require re-resolving the child pane by label before every `pane read`, `pane send-text`, or cleanup action.
+- Did not define dependent issue sequencing; an agent could spawn implementer/reviewer children for all dependent issues in parallel because grouped child work is encouraged but dependency ordering is not guarded.
+- Did not define reviewer `APPROVE` / `BLOCK` semantics or a `BLOCK -> implementer fix -> re-review` loop.
+- Did not state that reviewer `BLOCK` stops PR creation/merge.
+- Did not state that child agents must not create or merge PRs unless explicitly delegated.
+- Likely rationalization: "parent decides" is broad enough to keep overall authority while still allowing a child to create a PR, or to continue downstream work while a reviewer block is being fixed.
+
 ## Skill implications
 
 The skill must teach:
@@ -49,6 +65,9 @@ The skill must teach:
 5. Include an explicit report convention in every child prompt:
    - `herdr pane send-text <parent_pane> '【<child> report】<summary>'`
    - `herdr pane send-keys <parent_pane> Enter`
-6. For rereport/steer, re-run `herdr pane list`, locate by label, then `pane send-text` + Enter.
+6. Treat child pane IDs as ephemeral: before every child `pane read`, `pane send-text`, or cleanup action, re-run `herdr pane list` and resolve the current child pane by stable label.
 7. Clean up with `herdr workspace close <workspace_id>` for grouped child work.
 8. Verify cleanup with `herdr pane list` and optionally `ps`.
+9. For implementer/reviewer delegation, model reviewer reports as `APPROVE` or `BLOCK`; `BLOCK` goes back to the implementer for a fix and then requires re-review.
+10. For dependent issue waves, process exactly one issue at a time, merge the current approved PR before starting the next dependent issue, and keep labels unique per issue/role.
+11. Keep PR creation and merge authority with the parent unless explicitly delegated; no PR creation/merge while review is blocked.

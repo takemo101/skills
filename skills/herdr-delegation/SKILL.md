@@ -65,17 +65,28 @@ herdr pane send-keys <PARENT_PANE> Enter
 
 For long output: write a file and report the path. Do not paste huge transcripts into the parent pane.
 
-### 5. Steer or request rereport
+### 5. Resolve child panes by label before every action
 
-Re-list panes first, find the child by label, then send text:
+Treat child pane IDs as ephemeral. Before each child `pane read`, `pane send-text`, or cleanup action, re-run `herdr pane list` and resolve the current pane by stable label:
 
 ```bash
-herdr pane list
-herdr pane send-text <CHILD_PANE> "もう一度、親ペイン <PARENT_PANE> に【docs-scout report】形式で再報告してください。"
-herdr pane send-keys <CHILD_PANE> Enter
+CHILD_LABEL="docs-scout"
+CHILD_PANE=$(herdr pane list | CHILD_LABEL="$CHILD_LABEL" python3 -c 'import os,sys,json; j=json.load(sys.stdin); label=os.environ["CHILD_LABEL"]; print(next(p["pane_id"] for p in j["result"]["panes"] if p.get("label") == label))')
+echo "$CHILD_PANE"
 ```
 
-### 6. Clean up
+Keep labels unique per child role and issue (`mik-103-implementer`, `mik-103-reviewer`). Never reuse an old child pane ID after panes close, compact, or disappear.
+
+### 6. Steer, read, or request rereport
+
+Resolve by label first, then act on the current pane:
+
+```bash
+herdr pane send-text "$CHILD_PANE" "もう一度、親ペイン <PARENT_PANE> に【docs-scout report】形式で再報告してください。"
+herdr pane send-keys "$CHILD_PANE" Enter
+```
+
+### 7. Clean up
 
 For grouped child work, close the child workspace:
 
@@ -92,6 +103,35 @@ If needed, check processes by child labels first. A broad `pi` grep may match th
 ps -axo pid,ppid,stat,command | grep -E 'docs-scout|store-scout|profile-scout' | grep -v grep || true
 ```
 
+## Review and dependent-issue workflows
+
+### Reviewer `BLOCK` loop
+
+Use explicit reviewer outcomes for delegated implementation:
+
+1. Implementer reports done with checks run and changed files/branch/PR draft state.
+2. Reviewer reports `APPROVE` or `BLOCK: <blocker summary>`.
+3. If `BLOCK`, parent sends the blocker summary back to the implementer pane.
+4. Implementer fixes, reruns checks, and reports again.
+5. Parent starts or reuses a reviewer/rereviewer pane.
+6. Continue only after `APPROVE`.
+
+No PR creation or merge while review is blocked.
+
+### Sequential dependent issue wave
+
+For chains like `MIK-102 -> MIK-103 -> MIK-104`:
+
+- Use one shared child workspace for the wave.
+- Use separate labels per issue and role (`mik-102-implementer`, `mik-102-reviewer`).
+- Process exactly one dependent issue at a time.
+- Finish implementation, review, fixes, approval, PR creation/merge, and latest pull for the current issue before starting the next dependent issue.
+- Keep the parent as decision maker and PR owner.
+
+### PR guardrails
+
+Child agents must not create or merge PRs unless the parent explicitly delegates that action in the child prompt. By default, children implement, review, fix, run checks, and report. The parent reviews reports, creates/merges PRs, pulls latest, and decides when to start the next issue.
+
 ## Quick Reference
 
 | Need | Command |
@@ -101,17 +141,23 @@ ps -axo pid,ppid,stat,command | grep -E 'docs-scout|store-scout|profile-scout' |
 | New workspace | `herdr workspace create --cwd "$PWD" --label NAME --no-focus` |
 | Spawn child | `herdr agent start NAME --workspace WS --no-focus -- pi "PROMPT"` |
 | Report to parent | `pane send-text PARENT '【name report】...'` + `send-keys PARENT Enter` |
-| Rereport | `pane send-text CHILD "report again..."` + Enter |
-| Cleanup group | `herdr workspace close WS` |
+| Resolve child | `herdr pane list` → find current pane by stable label |
+| Read/steer/rereport | Resolve label first, then `pane read` or `pane send-text CHILD ...` + Enter |
+| Review block | Send `BLOCK` summary to implementer, fix, re-review; continue only on `APPROVE` |
+| Dependent issue chain | One issue at a time; merge approved PR before starting next dependent issue |
+| Cleanup group | Resolve/check labels, then `herdr workspace close WS` |
 
 ## Common Mistakes
 
 | Mistake | Fix |
 |---|---|
 | Assuming parent pane env vars exist | Use `herdr pane list` and focused pane. |
-| Using compacted stale pane IDs | Re-list panes before steering/cleanup; use labels. |
+| Using compacted stale pane IDs | Re-list panes and resolve by label before every `read`, `send-text`, or cleanup action. |
 | Forgetting report instructions | Put exact `send-text` + `send-keys Enter` command in every child prompt. |
 | Using herdr as scheduler | Parent decides; herdr only runs panes and carries messages. |
+| Running dependent issues in parallel | Process one dependent issue at a time; finish approved PR merge before the next issue. |
+| Treating reviewer `BLOCK` as advisory | Send blockers back to implementer and require re-review before PR creation/merge. |
+| Letting children create or merge PRs by default | Parent owns PR creation/merge unless explicitly delegated. |
 | Leaving child panes around | Close the child workspace and verify with `pane list`. |
 | Pasting huge reports | Child writes files and reports paths. |
 
@@ -126,6 +172,7 @@ Task:
 Rules:
 - Keep work bounded.
 - Do not edit files unless explicitly asked.
+- Do not create or merge PRs unless explicitly asked.
 - Write long findings to a file and report its path.
 - When done, report to parent pane <PARENT_PANE>:
 
