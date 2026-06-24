@@ -1,7 +1,7 @@
 {
   "lockfileVersion": 5,
-  "generatedBy": "sksync@0.0.8",
-  "generatedAt": "unix:1780308591",
+  "generatedBy": "sksync@0.0.10",
+  "generatedAt": "unix:1782273839",
   "root": ".",
   "skills": {
     "herdr": {
@@ -9,7 +9,7 @@
       "installSource": {
         "type": "git",
         "url": "https://github.com/ogulcancelik/herdr.git",
-        "ref": "043968dd97e8a864f4473f1651e9df9ecd6ed99d",
+        "ref": "HEAD",
         "path": "."
       },
       "include": [
@@ -29,11 +29,25 @@
         "type": "local",
         "path": "skills/herdr-delegation"
       },
-      "hash": "sha256-608edc39a80e424ecd1d7f4543723245b4350eb720e5d56b46b237a39994232e",
+      "hash": "sha256-774fbf437e285ec7c67ce1d2d04c92c18b54d1190cd4f2ff46289a5b3eb784ce",
       "files": [
         {
           "path": "SKILL.md",
-          "hash": "sha256-5af7ab291b78e785a5047fa0ce2acb1f69791d8123f6d57d8a34b56645aab24e"
+          "hash": "sha256-78f3633963b2341e051c4cd787ec148d9203a27b56d6f66154e6e224f4502a46"
+        }
+      ]
+    },
+    "memanto-pi-setup": {
+      "source": ".sksync/skills/memanto-pi-setup",
+      "installSource": {
+        "type": "local",
+        "path": "skills/memanto-pi-setup"
+      },
+      "hash": "sha256-c80f1e3dae7223d3337fbc5d515a62a472adfbe249a36462e1c8d24e1ee46fc7",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "hash": "sha256-68e35ff08cab2019fdab4e1bac7df7ed1e08b118e78822a74cdd14d7d1b2b747"
         }
       ]
     }
