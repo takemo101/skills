@@ -39,6 +39,19 @@
         "pi"
       ],
       "source": "./skills/herdr-delegation"
+    },
+    "memanto-pi-setup": {
+      "agents": [
+        "antigravity",
+        "claude-code",
+        "codex",
+        "gemini-cli",
+        "hermes",
+        "jcode",
+        "opencode",
+        "pi"
+      ],
+      "source": "./skills/memanto-pi-setup"
     }
   },
   "skillDir": "./.sksync/skills"

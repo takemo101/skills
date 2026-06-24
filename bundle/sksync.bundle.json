@@ -11,6 +11,9 @@
     },
     "herdr-delegation": {
       "source": "../skills/herdr-delegation"
+    },
+    "memanto-pi-setup": {
+      "source": "../skills/memanto-pi-setup"
     }
   }
 }
